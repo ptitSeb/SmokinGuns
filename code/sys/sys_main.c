@@ -595,6 +595,9 @@ void Sys_BinaryEngineComment( void ) {
 main
 =================
 */
+#ifdef PANDORA
+int noshouldermb;
+#endif
 int main( int argc, char **argv )
 {
 	int   i;
@@ -646,6 +649,12 @@ int main( int argc, char **argv )
 	for( i = 1; i < argc; i++ )
 	{
 		const qboolean containsSpaces = strchr(argv[i], ' ') != NULL;
+		#ifdef PANDORA
+		if( !strcmp( argv[i], "--noshouldermb" )) {
+			noshouldermb=1;
+		} else {
+			noshouldermb=0;
+		#endif
 		if (containsSpaces)
 			Q_strcat( commandLine, sizeof( commandLine ), "\"" );
 
@@ -676,6 +685,9 @@ int main( int argc, char **argv )
 			else if (!strcmp(cv_name, "sv_daemon") && atoi(cv_value))
 				qdaemon = qtrue;
 		}
+	#ifdef PANDORA
+	}
+	#endif
 	}
 	Sys_LockMyself(qjail, quser);
 
@@ -690,6 +702,9 @@ int main( int argc, char **argv )
 		Sys_Daemonize();
 	}
 #else
+	#ifdef PANDORA
+	}
+	#endif
 	}
 #endif
 

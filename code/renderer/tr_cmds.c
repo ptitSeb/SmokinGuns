@@ -351,6 +351,7 @@ void RE_BeginFrame( stereoFrame_t stereoFrame ) {
 	//
 	// do overdraw measurement
 	//
+	#ifndef HAVE_GLES
 	if ( r_measureOverdraw->integer )
 	{
 		if ( glConfig.stencilBits < 4 )
@@ -385,6 +386,7 @@ void RE_BeginFrame( stereoFrame_t stereoFrame ) {
 		}
 		r_measureOverdraw->modified = qfalse;
 	}
+	#endif
 
 	//
 	// texturemode stuff
@@ -415,6 +417,7 @@ void RE_BeginFrame( stereoFrame_t stereoFrame ) {
 			ri.Error(ERR_FATAL, "RE_BeginFrame() - glGetError() failed (0x%x)!", err);
 	}
 
+	#ifndef HAVE_GLES
 	if (glConfig.stereoEnabled) {
 		if( !(cmd = R_GetCommandBuffer(sizeof(*cmd))) )
 			return;
@@ -474,6 +477,7 @@ void RE_BeginFrame( stereoFrame_t stereoFrame ) {
 			colcmd->commandId = RC_COLORMASK;
 		}
 		else
+#endif
 		{
 			if(stereoFrame != STEREO_CENTER)
 				ri.Error( ERR_FATAL, "RE_BeginFrame: Stereo is disabled, but stereoFrame was %i", stereoFrame );
@@ -486,6 +490,7 @@ void RE_BeginFrame( stereoFrame_t stereoFrame ) {
 		{
 			cmd->commandId = RC_DRAW_BUFFER;
 
+#ifndef HAVE_GLES
 			if(r_anaglyphMode->modified)
 			{
 				qglColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -496,9 +501,12 @@ void RE_BeginFrame( stereoFrame_t stereoFrame ) {
 				cmd->buffer = (int)GL_FRONT;
 			else
 				cmd->buffer = (int)GL_BACK;
+#endif
 		}
+#ifndef HAVE_GLES
 	}
-
+#endif
+	
 	tr.refdef.stereoFrame = stereoFrame;
 }
 
