@@ -644,7 +644,9 @@ int main( int argc, char **argv )
 	Sys_ParseArgs( argc, argv );
 	Sys_SetBinaryPath( Sys_Dirname( argv[ 0 ] ) );
 	Sys_SetDefaultInstallPath( DEFAULT_BASEDIR );
-
+	#ifdef PANDORA
+	noshouldermb=0;
+	#endif
 	// Concatenate the command line for passing to Com_Init
 	for( i = 1; i < argc; i++ )
 	{
@@ -653,7 +655,6 @@ int main( int argc, char **argv )
 		if( !strcmp( argv[i], "--noshouldermb" )) {
 			noshouldermb=1;
 		} else {
-			noshouldermb=0;
 		#endif
 		if (containsSpaces)
 			Q_strcat( commandLine, sizeof( commandLine ), "\"" );
